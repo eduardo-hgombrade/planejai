@@ -7,7 +7,7 @@ import { getInsight, type InsightData } from '@/services/aiService'
 
 export const useInsight = (id: string) => {
   const isRequestPending = useRef(false)
-    const { getFormData, updateSimulation } = useSimulationStorage()
+  const { getFormData, updateSimulation } = useSimulationStorage()
 
   const [insight, setInsight] = useState<InsightData | null>(() => {
     const simulation = getFormData(id)

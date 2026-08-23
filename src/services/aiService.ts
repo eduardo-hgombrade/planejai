@@ -33,6 +33,10 @@ const MODEL_NAME = 'gemini-flash-latest'
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${API_KEY}`
 
 const callGeminiAPI = async (prompt: string) => {
+  if (!import.meta.env.VITE_GEMINI_API_KEY) {
+    throw new Error('Chave da API Gemini não configurada.')
+  }
+
   const response = await fetch(GEMINI_API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -45,22 +49,22 @@ const callGeminiAPI = async (prompt: string) => {
     throw new Error(`Erro na requisição: ${response.status}`)
   }
 
-  return (await response.json()) as GeminiResponse
+  const data = (await response.json()) as Partial<GeminiResponse>
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text
+
+  if (!text) {
+    throw new Error('A IA não retornou conteúdo.')
+  }
+
+  return text
 }
 
 export const getInsight = async (prompt: string) => {
-  const response = await callGeminiAPI(prompt)
-  const json = response.candidates[0].content.parts[0].text
+  const text = await callGeminiAPI(prompt)
+  const json = text.replace(/^```json\s*|\s*```$/g, '').trim()
   return JSON.parse(json) as InsightData
 }
 
 export const askEducator = async (prompt: string) => {
-  const response = await callGeminiAPI(prompt)
-  const text = response.candidates[0]?.content.parts[0]?.text
-
-  if (!text) {
-    throw new Error('A IA não retornou uma resposta.')
-  }
-
-  return text
+  return callGeminiAPI(prompt)
 }

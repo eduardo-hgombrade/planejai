@@ -70,6 +70,9 @@ export function AIInsightsCard({ simulationId }: AIInsightCardProps) {
       setMessages(completedMessages)
       updateChatMessages(simulationId, completedMessages)
     } catch {
+      setMessages(messages)
+      setQuestion(trimmedQuestion)
+      updateChatMessages(simulationId, messages)
       setChatError('Não foi possível obter uma resposta. Tente novamente.')
     } finally {
       setChatLoading(false)

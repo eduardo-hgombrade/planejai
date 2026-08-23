@@ -6,7 +6,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
   const [theme, setTheme] = useState<Theme>(() => {
     const localStorageTheme = localStorage.getItem('theme') as Theme | null
 
-    if (localStorageTheme) {
+    if (localStorageTheme === 'light' || localStorageTheme === 'dark') {
       return localStorageTheme
     }
 
