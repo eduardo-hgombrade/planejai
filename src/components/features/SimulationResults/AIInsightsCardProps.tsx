@@ -1,3 +1,7 @@
+import 'react-loading-skeleton/dist/skeleton.css'
+
+import Skeleton from 'react-loading-skeleton'
+
 import { useInsight } from '@/hooks/useInsight'
 
 import { Content } from '../Insights/Content'
@@ -20,7 +24,18 @@ export function AIInsightsCard({ simulationId }: AIInsightCardProps) {
         </span>
       </div>
 
-      {isLoading && <p>Carregando...</p>}
+      {isLoading && (
+        <div className="flex">
+          <Skeleton
+            count={10.5}
+            baseColor="var(--color-skeleton-base)"
+            highlightColor="var(--color-skeleton-highlight)"
+            className="mb-3 flex rounded-lg"
+            containerClassName="flex-1"
+            inline
+          />
+        </div>
+      )}
       {!isLoading && error && (
         <Error
           simulationId={simulationId}
