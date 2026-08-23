@@ -61,3 +61,35 @@ Regras:
   - "needs_adjustment": saldo negativo de até 20% do valor da economia mensal necessária
   - "unfeasible": saldo negativo superior a 20% do valor da economia mensal necessária`
 }
+
+export function buildChatPrompt(
+  simulation: SimulationRecord,
+  question: string,
+  messages: SimulationRecord['chatMessages'] = [],
+) {
+  const conversation = messages
+    .map(
+      (message) =>
+        `${message.role === 'user' ? 'Usuário' : 'Educador Financeiro'}: ${message.content}`,
+    )
+    .join('\n')
+
+  return `Você é o Educador Financeiro do Planej.ai. Responda à pergunta do usuário com clareza, objetividade e acolhimento, sempre em português do Brasil. Use os dados da simulação abaixo para personalizar a resposta. Não invente dados, não dê recomendações ilegais ou promessas de rentabilidade. Responda apenas com o texto da resposta, sem JSON, markdown ou títulos.
+
+Dados da simulação:
+- Renda mensal bruta: ${simulation.income}
+- Custos fixos essenciais: ${simulation.expenses}
+- Dívidas e parcelas mensais: ${simulation.debts}
+- Meta: ${simulation.goalName}
+- Custo da meta: ${simulation.goalAmount}
+- Prazo desejado: ${simulation.goalDeadline} meses
+
+Diagnóstico inicial:
+${simulation.insight?.diagnosis.content ?? 'Ainda não disponível.'}
+
+Histórico da conversa:
+${conversation || 'Nenhuma mensagem anterior.'}
+
+Nova pergunta do usuário:
+${question}`
+}

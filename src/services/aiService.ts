@@ -53,3 +53,14 @@ export const getInsight = async (prompt: string) => {
   const json = response.candidates[0].content.parts[0].text
   return JSON.parse(json) as InsightData
 }
+
+export const askEducator = async (prompt: string) => {
+  const response = await callGeminiAPI(prompt)
+  const text = response.candidates[0]?.content.parts[0]?.text
+
+  if (!text) {
+    throw new Error('A IA não retornou uma resposta.')
+  }
+
+  return text
+}

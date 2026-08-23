@@ -53,6 +53,18 @@ export const useSimulationStorage = () => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated))
   }
 
+  const updateChatMessages = (
+    id: string,
+    chatMessages: SimulationRecord['chatMessages'],
+  ) => {
+    const savedData = getAllSimulations()
+    const updated = savedData.map((record) =>
+      record.id === id ? { ...record, chatMessages } : record,
+    )
+
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated))
+  }
+
   const deleteSimulation = (id: string) => {
     const savedData = getAllSimulations()
     const updated = savedData.filter((record) => record.id !== id)
@@ -65,6 +77,7 @@ export const useSimulationStorage = () => {
     getFormData,
     getAllSimulations,
     updateSimulation,
+    updateChatMessages,
     deleteSimulation,
   }
 }
