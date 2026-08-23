@@ -22,15 +22,26 @@ export const useSimulationStorage = () => {
   }
 
   const getFormData = (id: string) => {
-  const storage = localStorage.getItem(LOCAL_STORAGE_KEY)
+    const storage = localStorage.getItem(LOCAL_STORAGE_KEY)
 
-  if (!storage) {
-    return null
+    if (!storage) {
+      return null
+    }
+
+    const savedData = JSON.parse(storage) as SimulationRecord[]
+    return savedData.find((record) => record.id === id) || null
   }
 
-  const savedData = JSON.parse(storage) as SimulationRecord[]
-  return savedData.find((record) => record.id === id) || null
-}
+  const updateSimulation = (id: string, data: SimulationRecord) => {
+    const storage = localStorage.getItem(LOCAL_STORAGE_KEY)
+    const savedData = storage ? (JSON.parse(storage) as SimulationRecord[]) : []
 
-  return { saveFormData, getFormData }
+    const updated = savedData.map((record) =>
+      record.id === id ? { ...data } : record,
+    )
+
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated))
+  }
+
+  return { saveFormData, getFormData, updateSimulation }
 }
