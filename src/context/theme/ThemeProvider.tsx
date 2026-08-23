@@ -1,4 +1,4 @@
-import { type PropsWithChildren,  useEffect,  useState } from 'react'
+import { type PropsWithChildren, useEffect, useState } from 'react'
 
 import { type Theme, ThemeContext } from './ThemeContext'
 
@@ -15,7 +15,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
     ).matches
 
     return systemPrefersDark ? 'dark' : 'light'
-})
+  })
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
